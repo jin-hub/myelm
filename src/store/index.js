@@ -9,7 +9,7 @@ export default new Vuex.Store({
             "name": "",
             "id": "",
         },
-        selected:"Delivery"
+        selected:"delivery"
     },
     mutations: {},
     actions: {},
