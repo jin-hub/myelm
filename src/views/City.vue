@@ -144,6 +144,7 @@ export default {
 					}, []);
 				
 			}
+			// 删除重复的历史记录，并将最近点击的历史记录置顶
 			localStorage.setItem('history', JSON.stringify(arr))
 			this.history = JSON.parse(localStorage.getItem('history'))
 		},
