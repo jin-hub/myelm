@@ -16,7 +16,12 @@
 			<div v-if="list==''" class="his after">
 				<div class="maintop fs0-8 padlr10">搜索历史</div>
 				<div v-if="history!=''" class="mainbody bgfff">
-					<div v-for="item in history" :key="item.id"  class="mgbot10 after" @click="goDelivery()">
+					<div
+						v-for="item in history"
+						:key="item.id"
+						class="mgbot10 after"
+						@click="changeHistory({name:item.name,latitude:item.latitude,longitude:item.longitude,address:item.address,geohash:item.geohash}),goDelivery()"
+					>
 						<div class="ih30">{{item.name}}</div>
 						<div class="ih30 fs0-8 col9f">{{item.address}}</div>
 					</div>
@@ -30,7 +35,7 @@
 				v-for="item in list"
 				@click="goAddress({name:item.name,latitude:item.latitude,longitude:item.longitude,address:item.address,geohash:item.geohash})"
 				:key="item.name"
-				class="mgbot10 after "
+				class="mgbot10 after"
 			>
 				<div class="ih30">{{item.name}}</div>
 				<div class="ih30 fs0-8 col9f">{{item.address}}</div>
@@ -104,7 +109,6 @@ export default {
 				}
 				if (!isExist) {
 					arr.unshift(e)
-					
 				} else {
 					return
 				}
@@ -119,6 +123,29 @@ export default {
 		clearAll: function () {
 			this.history = ''
 			localStorage.clear()
+		},
+		changeHistory: function (ss) {
+			// this.arr.unshift(ss)
+			// sb.unshift(ss)
+			// alert(JSON.stringify(sb))
+			// this.history = JSON.parse(localStorage.getItem('history'))
+			// alert(JSON.stringify(this.history))
+			// this.history
+			// Object.keys(localStorage).forEach(item => item.indexOf(JSON.stringify(ss)) !== -1 ? localStorage.removeItem(item) : '');
+			// alert(JSON.stringify(JSON.parse(localStorage.getItem('history'))) )
+			var arr = []
+			var obj = {}
+			if (localStorage.getItem('history')) {
+				arr = JSON.parse(localStorage.getItem('history'))
+				arr.unshift(ss)
+				arr = arr.reduce(function(item, next) {
+					obj[next.geohash] ? '' : obj[next.geohash] = true && item.push(next);
+					return item;
+					}, []);
+				
+			}
+			localStorage.setItem('history', JSON.stringify(arr))
+			this.history = JSON.parse(localStorage.getItem('history'))
 		},
 	},
 }
@@ -156,7 +183,7 @@ export default {
 .clearall {
 	text-align: center;
 }
-.mgtop10{
+.mgtop10 {
 	margin-bottom: 2px;
 }
 </style>
